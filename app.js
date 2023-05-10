@@ -8,9 +8,11 @@ app.get("/api/topics", getNewsTopics);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.use((err, req, res, next) => {
-  if (err.code && err.msg) {
+  if (err.code == '22P02') {
+    res.status(400).send({ msg: `Bad Request: This is not a valid article number!` })
+  } else if (err.code && err.msg) {
     res.status(err.code).send({ msg: err.msg });
-  } else {
+} else {
     next();
   }
 });

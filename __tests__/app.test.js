@@ -62,8 +62,8 @@ describe("GET /api/articles/:article_id || Status: 200", () => {
       .expect(400)
       .then((response) => {
         const { msg } = response.body;
-        expect(msg).toEqual(
-          "Bad Request: 'somenews' is not a valid article number!"
+        expect(msg).toBe(
+          "Bad Request: This is not a valid article number!"
         );
       });
   });

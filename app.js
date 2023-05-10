@@ -1,11 +1,12 @@
 const express = require("express");
-const { getNewsTopics } = require('./controllers/nc-news.controller');
+const { getNewsTopics, getArticleById } = require("./controllers/nc-news.controller");
 
 const app = express();
 
 app.get("/api/topics", getNewsTopics);
+app.get("/api/articles/:article_id", getArticleById);
 
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
   if (err.code && err.msg) {
     res.status(err.code).send({ msg: err.msg });
   } else {
@@ -14,7 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-      res.status(500).send({ msg: "Internal Server Error!" });
-  });
+  res.status(500).send({ msg: "Internal Server Error!" });
+});
 
 module.exports = app;

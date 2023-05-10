@@ -3,7 +3,7 @@ const request = require("supertest");
 const connection = require("../db/connection");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
-const db = require("../db/connection");
+const apiResponse = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(data);
@@ -24,6 +24,18 @@ describe("GET /api/topics || Status: 200", () => {
             description: expect.any(String),
           });
         });
+      });
+  });
+});
+
+describe("GET /api || Status: 200", () => {
+  test("GET - status: 200 - responds with all available api endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        const { apiEndpoints } = response.body;
+        expect(apiEndpoints).toEqual(apiResponse);
       });
   });
 });

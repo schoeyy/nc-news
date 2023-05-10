@@ -1,4 +1,6 @@
 const { fetchNewsTopics, fetchArticleById } = require("../models/nc-news.model");
+const apiEndpoints = require("../endpoints.json");
+const { fetchNewsTopics } = require("../models/nc-news.model");
 
 exports.getNewsTopics = (req, res, next) => {
   fetchNewsTopics()
@@ -10,6 +12,7 @@ exports.getNewsTopics = (req, res, next) => {
     });
 };
 
+
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   fetchArticleById(article_id)
@@ -19,4 +22,7 @@ exports.getArticleById = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+
+exports.getApi = (req, res) => {
+  res.status(200).send({ apiEndpoints });
 };

@@ -3,7 +3,7 @@ const request = require("supertest");
 const connection = require("../db/connection");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
-const db = require("../db/connection");
+const apiResponse = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(data);
@@ -63,6 +63,16 @@ describe("GET /api/articles/:article_id || Status: 200", () => {
       .then((response) => {
         const { msg } = response.body;
         expect(msg).toEqual("Bad Request: 'somenews' is not a valid article number!");
+   });
+  });
+
+describe("GET /api || Status: 200", () => {
+  test("GET - status: 200 - responds with all available api endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        const { apiEndpoints } = response.body;
+        expect(apiEndpoints).toEqual(apiResponse);
       });
   });
-});

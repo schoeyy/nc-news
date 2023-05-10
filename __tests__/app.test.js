@@ -62,9 +62,12 @@ describe("GET /api/articles/:article_id || Status: 200", () => {
       .expect(400)
       .then((response) => {
         const { msg } = response.body;
-        expect(msg).toEqual("Bad Request: 'somenews' is not a valid article number!");
-   });
+        expect(msg).toEqual(
+          "Bad Request: 'somenews' is not a valid article number!"
+        );
+      });
   });
+});
 
 describe("GET /api || Status: 200", () => {
   test("GET - status: 200 - responds with all available api endpoints", () => {
@@ -76,3 +79,4 @@ describe("GET /api || Status: 200", () => {
         expect(apiEndpoints).toEqual(apiResponse);
       });
   });
+});

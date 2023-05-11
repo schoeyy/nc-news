@@ -13,8 +13,8 @@ beforeEach(() => {
 afterAll(() => connection.end());
 
 describe("Api", () => {
-  describe("GET /api || Status: 200", () => {
-    test("GET - status: 200 - responds with all available api endpoints", () => {
+  describe("GET /api", () => {
+    test("Status: 200 || responds with all available api endpoints", () => {
       return request(app)
         .get("/api")
         .expect(200)
@@ -28,7 +28,7 @@ describe("Api", () => {
 
 describe("Topics", () => {
   describe("GET /api/topics || Status: 200", () => {
-    test(`Endpoint should return an array of objects, these objects should contain properties 'slug', and 'description'`, () => {
+    test(`Status: 200 || Endpoint should return an array of objects, these objects should contain properties 'slug', and 'description'`, () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
@@ -46,8 +46,8 @@ describe("Topics", () => {
 });
 
 describe("Articles", () => {
-  describe("GET /api/articles/:article_id || Status: 200", () => {
-    test(`should respond with the correct article, with the required properties`, () => {
+  describe("GET /api/articles/:article_id", () => {
+    test(`Status: 200 || should respond with the correct article, with the required properties`, () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
@@ -65,7 +65,7 @@ describe("Articles", () => {
           });
         });
     });
-    test(`should return a not found error when the article doesn't exist`, () => {
+    test(`Status: 404 || should return a not found error when the article doesn't exist`, () => {
       return request(app)
         .get("/api/articles/10000")
         .expect(404)
@@ -74,7 +74,7 @@ describe("Articles", () => {
           expect(msg).toEqual("Not Found: Article 10000 cannot be found!");
         });
     });
-    test(`should return a error when passed an invalid article id`, () => {
+    test(`Status: 400 || should return a error when passed an invalid article id`, () => {
       return request(app)
         .get("/api/articles/somenews")
         .expect(400)
@@ -84,7 +84,7 @@ describe("Articles", () => {
         });
     });
   });
-  test(`should return a not found error when the article doesn't exist`, () => {
+  test(`Status: 404 || should return a not found error when the article doesn't exist`, () => {
     return request(app)
       .get("/api/articles/10000")
       .expect(404)
@@ -93,7 +93,7 @@ describe("Articles", () => {
         expect(msg).toEqual("Not Found: Article 10000 cannot be found!");
       });
   });
-  test(`should return a error when passed an invalid article id`, () => {
+  test(`Status: 400 || should return a error when passed an invalid article id`, () => {
     return request(app)
       .get("/api/articles/somenews")
       .expect(400)
@@ -102,8 +102,8 @@ describe("Articles", () => {
         expect(msg).toBe("Bad Request: This is not a valid article number!");
       });
   });
-  describe("GET /api/articles || Status: 200", () => {
-    test("responds with an array of article objects containing data about the article", () => {
+  describe("GET /api/articles", () => {
+    test("Status: 200 || responds with an array of article objects containing data about the article", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -124,7 +124,7 @@ describe("Articles", () => {
           });
         });
     });
-    test("results should be ordered by creation date, in descending order", () => {
+    test("Status: 200 || results should be ordered by creation date, in descending order", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -143,15 +143,25 @@ describe("Articles", () => {
         .expect(200)
         .then((response) => {
           const { comments } = response.body;
+          expect(comments.length > 0).toBe(true);
           comments.forEach((comment) => {
             expect(comment).toMatchObject({
               comment_id: expect.any(Number),
               votes: expect.any(Number),
               created_at: expect.any(String),
+              author: expect.any(String),
               body: expect.any(String),
               article_id: expect.any(Number),
             });
           });
+        });
+    });
+    test("Status: 200 || makes sure the response has results sorted by created_at in descending order", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then((response) => {
+          const { comments } = response.body;
           expect(comments).toBeSortedBy("created_at", {
             descending: true,
           });

@@ -10,11 +10,11 @@ exports.fetchArticleById = (article_id) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then((result) => {
-      if (result.rowCount == 0) {
+      if (result.rows.length == 0) {
         return Promise.reject({
           code: 404,
-          msg: `Not Found: Article ${article_id} cannot be found!`,
-        });
+          msg: `Not Found: Article ${article_id} cannot be found!`
+        })
       } else {
         return result.rows[0];
       }

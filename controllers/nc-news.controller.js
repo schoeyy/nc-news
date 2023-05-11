@@ -1,13 +1,24 @@
+const apiEndpoints = require("../endpoints.json");
 const {
   fetchNewsTopics,
+  fetchArticles,
   fetchArticleById,
 } = require("../models/nc-news.model");
-const apiEndpoints = require("../endpoints.json");
 
 exports.getNewsTopics = (req, res, next) => {
   fetchNewsTopics()
     .then((topics) => {
       res.status(200).send({ topics });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getArticles = (req, res, next) => {
+  fetchArticles()
+  .then((articles) => {
+      res.status(200).send({ articles });
     })
     .catch((err) => {
       next(err);

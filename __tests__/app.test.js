@@ -92,6 +92,7 @@ describe("Articles", () => {
         .expect(200)
         .then((response) => {
           const { articles } = response.body;
+          expect(articles.length > 0).toBe(true);
           articles.forEach((article) => {
             expect(article).toMatchObject({
               author: expect.any(String),

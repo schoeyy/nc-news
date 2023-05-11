@@ -4,6 +4,7 @@ const connection = require("../db/connection");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const apiResponse = require("../endpoints.json");
+require("jest-sorted");
 
 beforeEach(() => {
   return seed(data);
@@ -62,21 +63,60 @@ describe("GET /api/articles/:article_id || Status: 200", () => {
       .expect(400)
       .then((response) => {
         const { msg } = response.body;
-        expect(msg).toBe(
-          "Bad Request: This is not a valid article number!"
-        );
+        expect(msg).toBe("Bad Request: This is not a valid article number!");
       });
   });
 });
 
 describe("GET /api || Status: 200", () => {
-  test("GET - status: 200 - responds with all available api endpoints", () => {
+  test("responds with all available api endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
       .then((response) => {
         const { apiEndpoints } = response.body;
         expect(apiEndpoints).toEqual(apiResponse);
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("Status: 200 || responds with all the comments for given article, in descending order", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
+        });
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("Status: 400 || invalid article id should give an error", () => {
+    return request(app)
+      .get("/api/articles/invalidId/comments")
+      .expect(400)
+      .then((response) => {
+        const { msg } = response.body;
+        expect(msg).toBe("Bad Request: This is not a valid article number!");
+      });
+  });
+  test("Status: 404 || article_id not found", () => {
+    return request(app)
+      .get("/api/articles/10000/comments")
+      .expect(404)
+      .then((response) => {
+        const { msg } = response.body;
+        expect(msg).toEqual("Not Found: Article 10000 cannot be found!");
       });
   });
 });

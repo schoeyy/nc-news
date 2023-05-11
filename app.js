@@ -19,7 +19,7 @@ app.use((err, req, res, next) => {
       .status(400)
       .send({ msg: `Bad Request: This is not a valid article number!` });
   } else if (err.code && err.msg) {
-    res.status(err.code).send({ msg: err.msg });
+    res.status(err.code).send({ msg: err.msg});
   } else {
     next();
   }

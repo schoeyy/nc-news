@@ -143,7 +143,7 @@ describe("Articles", () => {
         .expect(200)
         .then((response) => {
           const { comments } = response.body;
-          expect(comments.length > 0).toBe(true);
+          expect(comments.length === 11).toBe(true);
           comments.forEach((comment) => {
             expect(comment).toMatchObject({
               comment_id: expect.any(Number),

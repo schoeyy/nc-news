@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getNewsTopics,
   getApi,
+  getArticles,
   getArticleById,
   getArticleCommentsById,
 } = require("./controllers/nc-news.controller");
@@ -10,6 +11,7 @@ const app = express();
 
 app.get("/api", getApi);
 app.get("/api/topics", getNewsTopics);
+app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getArticleCommentsById);
 

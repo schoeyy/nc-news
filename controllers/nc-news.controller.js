@@ -3,7 +3,7 @@ const {
   fetchNewsTopics,
   fetchArticles,
   fetchArticleById,
-  fetchArticleCommentsById,
+  fetchArticleComments,
 } = require("../models/nc-news.model");
 
 exports.getNewsTopics = (req, res, next) => {
@@ -37,9 +37,9 @@ exports.getArticleById = (req, res, next) => {
     });
 };
 
-exports.getArticleCommentsById = (req, res, next) => {
+exports.getArticleComments = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleCommentsById(article_id)
+  fetchArticleComments(article_id)
     .then((comments) => {
       res.status(200).send({ comments });
     })

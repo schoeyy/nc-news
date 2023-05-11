@@ -4,7 +4,7 @@ const {
   getApi,
   getArticles,
   getArticleById,
-  getArticleCommentsById,
+  getArticleComments,
 } = require("./controllers/nc-news.controller");
 
 const app = express();
@@ -13,7 +13,7 @@ app.get("/api", getApi);
 app.get("/api/topics", getNewsTopics);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticleById);
-app.get("/api/articles/:article_id/comments", getArticleCommentsById);
+app.get("/api/articles/:article_id/comments", getArticleComments);
 
 app.use((err, req, res, next) => {
   if (err.code == "22P02") {

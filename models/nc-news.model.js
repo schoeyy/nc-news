@@ -7,40 +7,44 @@ exports.fetchNewsTopics = () => {
 };
 
 exports.fetchArticleById = (article_id) => {
-  return db
-    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
-    .then((result) => {
-      if (result.rows.length == 0) {
-        return Promise.reject({
-          code: 404,
-          msg: `Not Found: Article ${article_id} cannot be found!`
-        })
-      } else {
-        return result.rows[0];
-      }
-    });
+  return articleExists(article_id).then((article) => {
+    if (!article) {
+      return Promise.reject({
+        code: 404,
+        msg: `Not Found: Article ${article_id} cannot be found!`,
+      });
+    } else {
+      return db
+        .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+        .then((result) => {
+          return result.rows[0];
+        });
+    }
+  });
 };
 
-exports.fetchArticleCommentsById = (article_id) => {
-  return db
-    .query(
-      `
-    SELECT * FROM comments
-    WHERE article_id = $1
-    ORDER BY created_at DESC;
-  `,
-      [article_id]
-    )
-    .then((result) => {
-      if (result.rowCount == 0) {
-        return Promise.reject({
-          code: 404,
-          msg: `Not Found: Article ${article_id} cannot be found!`,
+exports.fetchArticleComments = (article_id) => {
+  return articleExists(article_id).then((article) => {
+    if (!article) {
+      return Promise.reject({
+        code: 404,
+        msg: `Not Found: Article ${article_id} cannot be found!`,
+      });
+    } else {
+      return db
+        .query(
+          `
+        SELECT * FROM comments
+        WHERE article_id = $1
+        ORDER BY created_at DESC;
+      `,
+          [article_id]
+        )
+        .then((result) => {
+          return result.rows;
         });
-      } else {
-        return result.rows;
-      }
-    });
+    }
+  });
 };
 
 exports.fetchArticles = () => {
@@ -59,3 +63,9 @@ exports.fetchArticles = () => {
       return result.rows;
     });
 };
+
+function articleExists(article_id) {
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+    .then((result) => result.rows[0]);
+}

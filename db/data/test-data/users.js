@@ -20,5 +20,11 @@ module.exports = [
     name: 'do_nothing',
     avatar_url:
       'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png'
+  },
+  {
+    username: 'theodore_bagwell',
+    name: 't-bag',
+    avatar_url:
+      'https://i.pinimg.com/600x315/7a/78/73/7a78733cbf07ba2cd2fde8bb96edf9e6.jpg'
   }
 ];

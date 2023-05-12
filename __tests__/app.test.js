@@ -207,6 +207,27 @@ describe("Articles", () => {
           });
         });
     });
+    test("Status: 201 - when additional data is passed in, any unecessary data is ignored and the comment is added", () => {
+      const newComment = {
+        username: "theodore_bagwell",
+        body: "When I play cards it ain't gamblin'",
+        votes: 4,
+      };
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then((response) => {
+          const { comment } = response.body;
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            body: expect.any(String),
+            author: expect.any(String),
+          });
+        });
+    });
     test("Status: 400 - Give an error if required information is missing from the post request", () => {
       const newComment = {
         username: "theodore_bagwell",
@@ -232,6 +253,15 @@ describe("Articles", () => {
         .then((response) => {
           const { msg } = response.body;
           expect(msg).toBe("404 Not found!");
+        });
+    });
+    test("Status: 400 || invalid article id should give an error", () => {
+      return request(app)
+        .get("/api/articles/invalidId/comments")
+        .expect(400)
+        .then((response) => {
+          const { msg } = response.body;
+          expect(msg).toBe("Bad Request: This is not a valid article number!");
         });
     });
   });

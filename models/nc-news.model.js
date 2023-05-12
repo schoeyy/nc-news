@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const format = require("pg-format");
 
 exports.fetchNewsTopics = () => {
   return db.query(`SELECT * FROM topics`).then((result) => {
@@ -69,3 +70,27 @@ function articleExists(article_id) {
     .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then((result) => result.rows[0]);
 }
+
+exports.addComment = (article_id, comment) => {
+  const { username, body } = comment;
+  const query = format(
+    `
+        INSERT INTO comments
+        (body, article_id, author)
+        VALUES 
+        %L
+        RETURNING *;
+    `,
+    [[body, article_id, username]]
+  );
+  return articleExists(article_id).then((article) => {
+    if (!article) {
+      return Promise.reject({
+        code: 404,
+        msg: `Not Found: Article ${article_id} cannot be found!`,
+      });
+    } else {
+      return db.query(query).then((result) => result.rows[0]);
+    }
+  });
+};

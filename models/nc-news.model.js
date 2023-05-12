@@ -8,18 +8,44 @@ exports.fetchNewsTopics = () => {
 };
 
 exports.fetchArticleById = (article_id) => {
-  return db
-    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
-    .then((result) => {
-      if (result.rowCount == 0) {
-        return Promise.reject({
-          code: 404,
-          msg: `Not Found: Article ${article_id} cannot be found!`,
+  return articleExists(article_id).then((article) => {
+    if (!article) {
+      return Promise.reject({
+        code: 404,
+        msg: `Not Found: Article ${article_id} cannot be found!`,
+      });
+    } else {
+      return db
+        .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+        .then((result) => {
+          return result.rows[0];
         });
-      } else {
-        return result.rows[0];
-      }
-    });
+    }
+  });
+};
+
+exports.fetchArticleComments = (article_id) => {
+  return articleExists(article_id).then((article) => {
+    if (!article) {
+      return Promise.reject({
+        code: 404,
+        msg: `Not Found: Article ${article_id} cannot be found!`,
+      });
+    } else {
+      return db
+        .query(
+          `
+        SELECT * FROM comments
+        WHERE article_id = $1
+        ORDER BY created_at DESC;
+      `,
+          [article_id]
+        )
+        .then((result) => {
+          return result.rows;
+        });
+    }
+  });
 };
 
 exports.fetchArticles = () => {
@@ -39,16 +65,23 @@ exports.fetchArticles = () => {
     });
 };
 
+function articleExists(article_id) {
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+    .then((result) => result.rows[0]);
+}
+
 exports.addComment = (article_id, comment) => {
   const { username, body } = comment;
   const query = format(
     `
         INSERT INTO comments
-        (body, article_id, username)
-        VALUES %L
+        (body, article_id, author)
+        VALUES 
+        %L
         RETURNING *;
     `,
-    [body, article_id, username]
+    [[body, article_id, username]]
   );
-  return db.query(query).then((result) => result.rows[0]);
+  return db.query(query).then((result) => result.rows[0])
 };

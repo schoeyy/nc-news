@@ -119,4 +119,53 @@ describe("Articles", () => {
         });
     });
   });
+  // describe("POST /api/articles/:article_id/comments", () => {
+  //   test("Status: 201 - should take a comment, add it to the article and respond with the commend added", () => {
+  //     const newComment = {
+  //       username: "theodore_bagwell",
+  //       body: "When I play cards it ain't gamblin'",
+  //     };
+  //     return request(app)
+  //       .post("/api/articles/1/comments")
+  //       .send(newComment)
+  //       .expect(201)
+  //       .then((response) => {
+  //         const { comment } = response.body;
+  //         expect(comment).toMatchObject({
+  //           comment_id: expect.any(Number),
+  //           votes: expect.any(Number),
+  //           created_at: expect.any(String),
+  //           body: expect.any(String),
+  //           username: expect.any(String),
+  //         });
+  //       });
+  //   });
+  //   test("Status: 400 - Give an error if required information is missing from the post request", () => {
+  //     const newComment = {
+  //       username: "theodore_bagwell",
+  //     };
+  //     return request(app)
+  //       .post("/api/articles/1/comments")
+  //       .send(newComment)
+  //       .expect(400)
+  //       .then((response) => {
+  //         const { msg } = response.body;
+  //         expect(msg).toBe("Bad Request: This is not a valid article number!");
+  //       });
+  //   });
+  //   test("Status: 404 - should give an error if the username doesn't exist", () => {
+  //     const newComment = {
+  //       username: "dwight_shrute",
+  //       body: "Today, smoking is going to save lives.",
+  //     };
+  //     return request(app)
+  //       .post("/api/articles/10/comments")
+  //       .send(newComment)
+  //       .expect(404)
+  //       .then((response) => {
+  //         const { msg } = response.body;
+  //         expect(msg).toBe("404 Not Found");
+  //       });
+  //   });
+  // });
 });

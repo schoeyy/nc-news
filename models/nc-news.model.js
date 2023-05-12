@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const format = require("pg-format");
 
 exports.fetchNewsTopics = () => {
   return db.query(`SELECT * FROM topics`).then((result) => {
@@ -23,7 +24,8 @@ exports.fetchArticleById = (article_id) => {
 
 exports.fetchArticles = () => {
   return db
-    .query(`
+    .query(
+      `
       SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
       COUNT(comment_id) AS comment_count
       FROM articles
@@ -35,4 +37,18 @@ exports.fetchArticles = () => {
     .then((result) => {
       return result.rows;
     });
+};
+
+exports.addComment = (article_id, comment) => {
+  const { username, body } = comment;
+  const query = format(
+    `
+        INSERT INTO comments
+        (body, article_id, username)
+        VALUES %L
+        RETURNING *;
+    `,
+    [body, article_id, username]
+  );
+  return db.query(query).then((result) => result.rows[0]);
 };

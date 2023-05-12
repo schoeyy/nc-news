@@ -3,6 +3,7 @@ const {
   fetchNewsTopics,
   fetchArticles,
   fetchArticleById,
+  addComment
 } = require("../models/nc-news.model");
 
 exports.getNewsTopics = (req, res, next) => {
@@ -38,4 +39,15 @@ exports.getArticleById = (req, res, next) => {
 
 exports.getApi = (req, res) => {
   res.status(200).send({ apiEndpoints });
+};
+
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  addComment(article_id, req.body)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

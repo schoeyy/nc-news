@@ -1,26 +1,17 @@
-const apiEndpoints = require("../endpoints.json");
 const {
-  fetchNewsTopics,
   fetchArticles,
   fetchArticleById,
-  addComment,
   fetchArticleComments,
-} = require("../models/nc-news.model");
-
-exports.getNewsTopics = (req, res, next) => {
-  fetchNewsTopics()
-    .then((topics) => {
-      res.status(200).send({ topics });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
+  addComment,
+  updateArticle,
+  addArticle,
+  removeArticle,
+} = require("../models/articles.model");
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles()
-  .then((articles) => {
-      res.status(200).send({ articles });
+  fetchArticles(req.query)
+    .then(({ articles, total_count }) => {
+      res.status(200).send({ articles, total_count });
     })
     .catch((err) => {
       next(err);
@@ -49,15 +40,43 @@ exports.getArticleComments = (req, res, next) => {
     });
 };
 
-exports.getApi = (req, res) => {
-  res.status(200).send({ apiEndpoints });
-};
-
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
   addComment(article_id, req.body)
     .then((comment) => {
       res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.patchArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  updateArticle(article_id, req.body)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postArticle = (req, res, next) => {
+  addArticle(req.body)
+    .then((article) => {
+      res.status(201).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.deleteArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  removeArticle(article_id)
+    .then(() => {
+      res.status(204).send();
     })
     .catch((err) => {
       next(err);

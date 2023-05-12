@@ -26,5 +26,11 @@ module.exports = [
     name: 't-bag',
     avatar_url:
       'https://i.pinimg.com/600x315/7a/78/73/7a78733cbf07ba2cd2fde8bb96edf9e6.jpg'
-  }
+  },
+  {
+    username: 'dwight_shrute',
+    name: 'dwight',
+    avatar_url:
+      'https://static.wikia.nocookie.net/theoffice/images/c/c5/Dwight_.jpg/revision/latest?cb=20170701082424'
+  },
 ];

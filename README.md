@@ -1,4 +1,4 @@
-# News API
+# NC News API
 
 This API is built with express & postgreSQl and is a RESTful API that interacts with a news database containing articles, topics, users, and comments.
 

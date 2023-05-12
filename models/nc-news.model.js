@@ -83,5 +83,14 @@ exports.addComment = (article_id, comment) => {
     `,
     [[body, article_id, username]]
   );
-  return db.query(query).then((result) => result.rows[0])
+  return articleExists(article_id).then((article) => {
+    if (!article) {
+      return Promise.reject({
+        code: 404,
+        msg: `Not Found: Article ${article_id} cannot be found!`,
+      });
+    } else {
+      return db.query(query).then((result) => result.rows[0]);
+    }
+  });
 };

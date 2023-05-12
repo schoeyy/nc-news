@@ -27,7 +27,7 @@ describe("Api", () => {
 });
 
 describe("Topics", () => {
-  describe("GET /api/topics || Status: 200", () => {
+  describe("GET /api/topics", () => {
     test(`Status: 200 || Endpoint should return an array of objects, these objects should contain properties 'slug', and 'description'`, () => {
       return request(app)
         .get("/api/topics")

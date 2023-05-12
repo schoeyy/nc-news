@@ -8,12 +8,7 @@ This API is built with express & postgreSQl and is a RESTful API that interacts 
 
 Follow the instructions below to clone, install dependencies, seed the local database, and run tests.
 
-### **Prerequisites**
-
-Make sure you have the following installed:
-
-- Node.js (v19 or higher)
-- PostgreSQL (v14 or higher)
+### **Installing**
 
 1. Clone the repository via SSH:
 
@@ -29,17 +24,17 @@ npm i
 
 3. Create the two `.env` files:
 
-   - Create a `.env.development` file and add the following:
+- Create a `.env.development` file and add the following:
 
-   ```bash
-   PGDATABASE=nc_news
-   ```
+```bash
+PGDATABASE=nc_news
+```
 
-   - Create a `.env.test` file and add the following:
+- Create a `.env.test` file and add the following:
 
-   ```bash
-   PGDATABASE=nc_news_test
-   ```
+```bash
+PGDATABASE=nc_news_test
+```
 
 4. Setup the local database:
 
@@ -59,10 +54,15 @@ npm run seed
 npm start
 ```
 
-## Running Tests
+## Testing
 
 To run the tests, run the following command:
 
 ```bash
 npm test
 ```
+
+## Make sure you have the following installed:
+
+- Node.js (v19 or higher)
+- PostgreSQL (v14 or higher)

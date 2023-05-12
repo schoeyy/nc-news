@@ -224,8 +224,8 @@ describe("Articles", () => {
             created_at: expect.any(String),
             body: expect.any(String),
             author: expect.any(String),
+            votes: 0,
           });
-          expect(comment).toHaveProperty("votes", 0);
         });
     });
     test("Status: 400 - Give an error if required information is missing from the post request", () => {

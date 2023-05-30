@@ -4,8 +4,12 @@ const cors = require("cors");
 const { customErr, dbErr, errLog } = require("./error-handler");
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 app.use("/api", apiRouter);
 

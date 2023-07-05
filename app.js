@@ -5,7 +5,11 @@ const { customErr, dbErr, errLog } = require("./error-handler");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use("/api", apiRouter);
 

@@ -122,7 +122,8 @@ exports.addComment = (article_id, comment) => {
         msg: `Not Found: Article ${article_id} cannot be found!`,
       });
     } else {
-      return db.query(query).then((result) => result.rows[0]);
+      return db.query(query).then((result) => console.log(result));
+      // result.rows[0]);
     }
   });
 };
